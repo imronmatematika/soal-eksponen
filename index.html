@@ -1,0 +1,482 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Latihan Numerasi Eksponen Kelas X</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg,#172554,#4c1d95);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 750px;
+    background: white;
+    border-radius: 20px;
+    padding: 35px;
+    box-shadow: 0 15px 40px rgba(0,0,0,.3);
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.header h1 {
+    color: #312e81;
+    font-size: 27px;
+}
+
+.header p {
+    color: #64748b;
+    margin-top: 8px;
+}
+
+.info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    color: #475569;
+    font-weight: bold;
+}
+
+.progress {
+    width: 100%;
+    height: 9px;
+    background: #e2e8f0;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background: #7c3aed;
+    width: 0%;
+    transition: .3s;
+}
+
+.question {
+    font-size: 19px;
+    line-height: 1.7;
+    color: #1e293b;
+    margin-bottom: 22px;
+    font-weight: 600;
+}
+
+.options {
+    display: grid;
+    gap: 12px;
+}
+
+.option {
+    padding: 15px;
+    border: 2px solid #cbd5e1;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: .2s;
+    font-size: 17px;
+    color: #334155;
+    background: white;
+}
+
+.option:hover {
+    border-color: #7c3aed;
+    background: #f5f3ff;
+}
+
+.option.selected {
+    border-color: #7c3aed;
+    background: #ede9fe;
+}
+
+.option.correct {
+    border-color: #16a34a;
+    background: #dcfce7;
+}
+
+.option.wrong {
+    border-color: #dc2626;
+    background: #fee2e2;
+}
+
+.explanation {
+    display: none;
+    margin-top: 20px;
+    padding: 18px;
+    background: #f1f5f9;
+    border-radius: 12px;
+    line-height: 1.7;
+    color: #334155;
+}
+
+button {
+    border: none;
+    background: #6d28d9;
+    color: white;
+    padding: 13px 25px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+button:hover {
+    background: #4c1d95;
+}
+
+button:disabled {
+    background: #94a3b8;
+    cursor: not-allowed;
+}
+
+.navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 25px;
+}
+
+.result {
+    display: none;
+    text-align: center;
+}
+
+.result h2 {
+    color: #312e81;
+    font-size: 30px;
+    margin-bottom: 15px;
+}
+
+.score {
+    font-size: 55px;
+    color: #7c3aed;
+    font-weight: bold;
+    margin: 20px;
+}
+
+.result p {
+    color: #475569;
+    font-size: 18px;
+    line-height: 1.7;
+}
+
+.restart {
+    margin-top: 25px;
+}
+
+.small {
+    font-size: 14px;
+    color: #64748b;
+    margin-top: 20px;
+    text-align: center;
+}
+
+@media(max-width:500px) {
+    .container {padding: 22px;}
+    .header h1 {font-size: 22px;}
+    .question {font-size: 17px;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+    <h1>LATIHAN NUMERASI EKSPONEN</h1>
+    <p>Matematika Kelas X | Tingkat Menengah</p>
+</div>
+
+<div id="quiz">
+
+    <div class="info">
+        <span id="number">Soal 1 dari 5</span>
+        <span>Nilai: 100 poin</span>
+    </div>
+
+    <div class="progress">
+        <div class="progress-bar" id="progress"></div>
+    </div>
+
+    <div class="question" id="question"></div>
+
+    <div class="options" id="options"></div>
+
+    <div class="explanation" id="explanation"></div>
+
+    <div class="navigation">
+        <button id="prev" onclick="previousQuestion()">
+            Sebelumnya
+        </button>
+
+        <button id="next" onclick="nextQuestion()" disabled>
+            Periksa Jawaban
+        </button>
+    </div>
+
+    <p class="small">Pilih satu jawaban yang paling tepat.</p>
+
+</div>
+
+<div class="result" id="result">
+    <h2>Hasil Latihan</h2>
+    <p>Nilai akhir kamu:</p>
+    <div class="score" id="score">0</div>
+    <p id="message"></p>
+    <button class="restart" onclick="restartQuiz()">
+        Ulangi Latihan
+    </button>
+</div>
+
+</div>
+
+<script>
+
+const questions = [
+
+{
+question:
+"Sebuah bakteri berkembang biak dengan cara membelah diri menjadi 2 setiap 20 menit. Jika mula-mula terdapat 5 bakteri, berapa jumlah bakteri setelah 2 jam?",
+
+options: [
+"A. 80 bakteri",
+"B. 160 bakteri",
+"C. 320 bakteri",
+"D. 640 bakteri"
+],
+
+answer: 2,
+
+explanation:
+"Waktu 2 jam = 120 menit. Banyak pembelahan = 120 ÷ 20 = 6 kali. Jumlah bakteri = 5 × 2⁶ = 5 × 64 = 320 bakteri."
+},
+
+{
+question:
+"Seorang petani memiliki 3 pohon mangga. Setiap pohon menghasilkan 3 cabang baru, dan setiap cabang menghasilkan 3 ranting. Jika pola pertumbuhan berlanjut dengan faktor 3 pada setiap tahap, berapa banyak ranting pada tahap ketiga, jika tahap pertama adalah 3 pohon?",
+
+options: [
+"A. 9 ranting",
+"B. 27 ranting",
+"C. 81 ranting",
+"D. 243 ranting"
+],
+
+answer: 1,
+
+explanation:
+"Tahap pertama = 3, tahap kedua = 3² = 9, dan tahap ketiga = 3³ = 27. Jadi terdapat 27 ranting."
+},
+
+{
+question:
+"Sebuah koloni mikroorganisme mula-mula berjumlah 1.000. Jumlahnya menjadi dua kali lipat setiap hari. Jika jumlah mikroorganisme setelah beberapa hari adalah 32.000, berapa hari waktu yang dibutuhkan?",
+
+options: [
+"A. 3 hari",
+"B. 4 hari",
+"C. 5 hari",
+"D. 6 hari"
+],
+
+answer: 2,
+
+explanation:
+"Gunakan model 1.000 × 2ⁿ = 32.000. Maka 2ⁿ = 32. Karena 32 = 2⁵, diperoleh n = 5 hari."
+},
+
+{
+question:
+"Pada sebuah permainan digital, skor awal pemain adalah 100 poin. Setiap level yang berhasil diselesaikan membuat skor menjadi 2 kali lipat dari skor sebelumnya. Berapakah skor setelah menyelesaikan 4 level?",
+
+options: [
+"A. 400 poin",
+"B. 800 poin",
+"C. 1.200 poin",
+"D. 1.600 poin"
+],
+
+answer: 3,
+
+explanation:
+"Skor akhir = 100 × 2⁴ = 100 × 16 = 1.600 poin."
+},
+
+{
+question:
+"Jumlah pengguna sebuah aplikasi pada bulan pertama adalah 500 orang. Setiap bulan jumlah pengguna menjadi 3 kali lipat. Jika pola ini berlangsung selama 3 bulan setelah bulan pertama, berapa jumlah pengguna pada akhir bulan keempat?",
+
+options: [
+"A. 4.500 orang",
+"B. 9.000 orang",
+"C. 13.500 orang",
+"D. 40.500 orang"
+],
+
+answer: 3,
+
+explanation:
+"Bulan pertama = 500. Akhir bulan keempat berarti terjadi 3 kali pertumbuhan. Jumlah pengguna = 500 × 3³ = 500 × 27 = 13.500 orang. Jadi jawaban yang benar adalah C."
+}
+
+];
+
+let current = 0;
+let answers = Array(questions.length).fill(null);
+let checked = Array(questions.length).fill(false);
+
+function loadQuestion() {
+
+    const q = questions[current];
+
+    document.getElementById("number").innerText =
+        "Soal " + (current+1) + " dari " + questions.length;
+
+    document.getElementById("progress").style.width =
+        ((current+1)/questions.length*100) + "%";
+
+    document.getElementById("question").innerText = q.question;
+
+    const options = document.getElementById("options");
+    options.innerHTML = "";
+
+    q.options.forEach((option,index) => {
+
+        const div = document.createElement("div");
+
+        div.className = "option";
+        div.innerText = option;
+
+        if(answers[current] === index) {
+            div.classList.add("selected");
+        }
+
+        if(checked[current]) {
+            if(index === q.answer) div.classList.add("correct");
+            else if(index === answers[current]) div.classList.add("wrong");
+        }
+
+        div.onclick = () => selectAnswer(index);
+
+        options.appendChild(div);
+    });
+
+    const explanation = document.getElementById("explanation");
+
+    explanation.style.display =
+        checked[current] ? "block" : "none";
+
+    explanation.innerHTML =
+        "<b>Pembahasan:</b><br>" + q.explanation;
+
+    document.getElementById("prev").disabled = current === 0;
+
+    const next = document.getElementById("next");
+
+    next.disabled = !checked[current] && answers[current] === null;
+
+    next.innerText =
+        checked[current]
+        ? (current === questions.length-1 ? "Lihat Hasil" : "Soal Berikutnya")
+        : "Periksa Jawaban";
+}
+
+function selectAnswer(index) {
+
+    if(checked[current]) return;
+
+    answers[current] = index;
+
+    loadQuestion();
+}
+
+function nextQuestion() {
+
+    if(!checked[current]) {
+        checked[current] = true;
+        loadQuestion();
+        return;
+    }
+
+    if(current < questions.length-1) {
+        current++;
+        loadQuestion();
+    } else {
+        showResult();
+    }
+}
+
+function previousQuestion() {
+
+    if(current > 0) {
+        current--;
+        loadQuestion();
+    }
+}
+
+function showResult() {
+
+    let correct = 0;
+
+    questions.forEach((q,i) => {
+        if(answers[i] === q.answer) correct++;
+    });
+
+    let score = correct * 20;
+
+    document.getElementById("quiz").style.display = "none";
+    document.getElementById("result").style.display = "block";
+
+    document.getElementById("score").innerText = score;
+
+    let message = "";
+
+    if(score === 100) {
+        message = "Luar biasa! Semua jawaban benar.";
+    } else if(score >= 80) {
+        message = "Bagus sekali! Pemahaman materi kamu sangat baik.";
+    } else if(score >= 60) {
+        message = "Cukup baik! Terus tingkatkan pemahamanmu.";
+    } else {
+        message = "Tetap semangat! Pelajari kembali konsep eksponen.";
+    }
+
+    document.getElementById("message").innerText =
+        message + " Kamu menjawab benar " +
+        correct + " dari 5 soal.";
+}
+
+function restartQuiz() {
+
+    current = 0;
+    answers = Array(questions.length).fill(null);
+    checked = Array(questions.length).fill(false);
+
+    document.getElementById("quiz").style.display = "block";
+    document.getElementById("result").style.display = "none";
+
+    loadQuestion();
+}
+
+loadQuestion();
+
+</script>
+
+</body>
+</html>
